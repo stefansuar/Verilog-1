@@ -1,0 +1,47 @@
+//easily calculate count for 500ms by dividing clock frequency by 2
+//ex 2MHz clock, 2mil ticks per sec, 500ms=0.5s, increment light every 1mil ticks
+module magic(clk, result, LEDR);
+
+	input clk;
+	//output reg [9:0]LEDR;
+	reg [3:0]count;
+	reg [13:0]array;
+	//input [13:0]array;
+	output [9:0]LEDR;
+	output reg [9:0]result;
+	
+	wire [9:0]arrayResult;
+	
+	
+	//assign array = 14'b00000000000011;
+	//assign LEDR[9:0] = array[11:2];
+		
+	initial
+	begin
+		//clk = 1;
+		count = 1;
+		array = 14'b00000000000011;
+	end
+	
+	assign arrayResult = array[11:2];
+
+	
+	always @(posedge clk)
+	begin
+		count = count+1;
+		if(count % 5000000 == 0)
+		begin
+			array = array<<1;
+		end
+		if(array == 14'b11000000000000)
+		begin
+			array = array>>1;
+		end
+	end
+	
+	//assign result = LEDmovement(array, arrayResult);
+
+	LEDmovement LEDmovementInst1(array, arrayResult);
+	
+endmodule
+
